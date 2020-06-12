@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm(this.submitFn);
+  AuthForm(
+    this.submitFn,
+    this.isLoading,
+  );
+
+  final bool isLoading;
 
   final void Function(
     String email,
@@ -28,13 +33,8 @@ class _AuthFormState extends State<AuthForm> {
 
     if (isValid) {
       _formKey.currentState.save();
-      widget.submitFn(
-        _userEmail.trim(),
-        _userName.trim(),
-        _userPassword.trim(),
-        _isLogin,
-        context
-      );
+      widget.submitFn(_userEmail.trim(), _userName.trim(), _userPassword.trim(),
+          _isLogin, context);
 
       //
     }
@@ -102,21 +102,24 @@ class _AuthFormState extends State<AuthForm> {
                     SizedBox(
                       height: 12,
                     ),
-                    RaisedButton(
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
-                      onPressed: _trySubmit,
-                    ),
-                    FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                    ),
+                    if (widget.isLoading) CircularProgressIndicator(),
+                    if (!widget.isLoading)
+                      RaisedButton(
+                        child: Text(_isLogin ? 'Login' : 'Signup'),
+                        onPressed: _trySubmit,
+                      ),
+                    if (!widget.isLoading)
+                      FlatButton(
+                        textColor: Theme.of(context).primaryColor,
+                        child: Text(_isLogin
+                            ? 'Create new account'
+                            : 'I already have an account'),
+                        onPressed: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                      ),
                   ],
                 ),
               ),
