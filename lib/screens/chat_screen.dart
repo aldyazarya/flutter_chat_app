@@ -14,6 +14,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // permission notification for IOS
   @override
   void initState() {
+    super.initState();
     final fbm = FirebaseMessaging();
     fbm.requestNotificationPermissions();
     fbm.configure(onMessage: (msg) {
@@ -27,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     });
     fbm.subscribeToTopic('chat');
-    super.initState();
+    
   }
 
   @override
@@ -35,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Chat'), actions: [
         DropdownButton(
+          underline: Container(),
           icon: Icon(
             Icons.more_vert,
             color: Theme.of(context).primaryIconTheme.color,
